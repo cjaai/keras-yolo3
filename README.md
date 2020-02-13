@@ -24,6 +24,16 @@ conda install -c conda-forge/label/cf201901 opencv
 
 python yolo.py
 
+conda批量导出包含环境中所有组件的requirements.txt文件
+
+conda list -e > requirements.txt
+
+pip批量安装requirements.txt文件中包含的组件依赖
+
+conda install --yes --file requirements.txt
+
+
+
 
 # keras-yolo3
 
