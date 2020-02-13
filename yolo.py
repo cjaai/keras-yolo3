@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
-"""
-Class definition of YOLO_v3 style detection model on image and video
-"""
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+os.environ['KERAS_BACKEND']='tensorflow'
 
 import colorsys
-import os
 from timeit import default_timer as timer
 
 import numpy as np
@@ -15,7 +13,6 @@ from PIL import Image, ImageFont, ImageDraw
 
 from yolo3.model import yolo_eval, yolo_body, tiny_yolo_body
 from yolo3.utils import letterbox_image
-import os
 from keras.utils import multi_gpu_model
 
 class YOLO(object):
@@ -42,6 +39,7 @@ class YOLO(object):
         self.class_names = self._get_class()
         self.anchors = self._get_anchors()
         self.sess = K.get_session()
+
         self.boxes, self.scores, self.classes = self.generate()
 
     def _get_class(self):
@@ -107,8 +105,7 @@ class YOLO(object):
             assert self.model_image_size[1]%32 == 0, 'Multiples of 32 required'
             boxed_image = letterbox_image(image, tuple(reversed(self.model_image_size)))
         else:
-            new_image_size = (image.width - (image.width % 32),
-                              image.height - (image.height % 32))
+            new_image_size = (image.width - (image.width % 32),image.height - (image.height % 32))
             boxed_image = letterbox_image(image, new_image_size)
         image_data = np.array(boxed_image, dtype='float32')
 
@@ -118,11 +115,7 @@ class YOLO(object):
 
         out_boxes, out_scores, out_classes = self.sess.run(
             [self.boxes, self.scores, self.classes],
-            feed_dict={
-                self.yolo_model.input: image_data,
-                self.input_image_shape: [image.size[1], image.size[0]],
-                K.learning_phase(): 0
-            })
+            feed_dict={self.yolo_model.input: image_data,self.input_image_shape: [image.size[1], image.size[0]],K.learning_phase(): 0})
 
         print('Found {} boxes for {}'.format(len(out_boxes), 'img'))
 
@@ -210,3 +203,22 @@ def detect_video(yolo, video_path, output_path=""):
             break
     yolo.close_session()
 
+def detect_img(yolo):
+    while True:
+        img = input('Input image filename:')
+        try:
+            image = Image.open(img)
+            #image = Image.open('1.jpg')
+        except:
+            print('Open Error! Try again!')
+            continue
+        else:
+            r_image = yolo.detect_image(image)
+            print(type(r_image))
+            import cv2
+            cv2.imwrite("out.jpg", np.asarray(r_image)[..., ::-1])
+            r_image.show()
+    yolo.close_session()
+
+if __name__ == '__main__':
+    detect_img(YOLO())
