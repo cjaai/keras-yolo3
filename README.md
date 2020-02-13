@@ -32,7 +32,9 @@ pip批量安装requirements.txt文件中包含的组件依赖
 
 conda install --yes --file requirements.txt
 
+OR
 
+conda create --name kerasX --file requirements.txt
 
 
 # keras-yolo3
