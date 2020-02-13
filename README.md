@@ -6,15 +6,15 @@ https://github.com/cjaai/keras-yolo3`
 
 D:\t210\keras-yolo3`
 
-conda create -n keras1
-activate keras1
-conda install  tensorflow-gpu==1.15
-conda install keras
-conda install scikit-learn
-conda install -c conda-forge matplotlib
-conda install -c anaconda pillow
-conda install -c conda-forge/label/cf201901 opencv 
-python yolo.py
+conda create -n keras1`
+activate keras1`
+conda install  tensorflow-gpu==1.15`
+conda install keras`
+conda install scikit-learn`
+conda install -c conda-forge matplotlib`
+conda install -c anaconda pillow`
+conda install -c conda-forge/label/cf201901 opencv `
+python yolo.py`
 
 
 
